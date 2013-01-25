@@ -922,7 +922,41 @@ OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
 	优思 显示在
 	     型  号 UC1  
 	     版本号 SeeMore_UC1_V1.1.0
-70.
-tt@tt:~/project/github$ git push origin master
-Username:
-Password:
+	     
+70. expect 参数设置
+  if {$argc!=5} {
+		send_user "Usage: $argv0 {fcip} {ftpip} {username} {password} {version}\n\n"
+		exit
+	}
+	set fcip [lindex $argv 0]
+	set ftpip [lindex $argv 1]
+	set username [lindex $argv 2]
+	set password [lindex $argv 3]
+	set version [lindex $argv 4]
+
+71. Git标签的事情
+  列出git中现有标签
+  $ git tag
+	v0.1
+	v1.3
+	
+	创建标签
+	$ git tag -a v1.4 -m ‘version 1.4′
+	$ git tag
+	v0.1
+	v1.3
+	v1.4
+	有GPG私钥的话，你也可以用GPG来给你的标签签名，把-a换成-s就可以了
+	$ git tag -s v1.5 -m ‘my signed 1.5 tag’
+	You need a passphrase to unlock the secret key for
+	user: “Scott Chacon ”
+	1024-bit DSA key, ID F721C45A, created 2009-02-09
+	
+	$ git show v1.5
+	
+	验证标签
+	使用’git tag -v (tag)’就可以验证一个签名标签了。这个命令会用到GPG来验证签名。前提是：你必须在密钥环中存放着签名者的公钥。
+	$ git tag -v v1.4.2.1
+	
+	共享标签
+	$ git push –tags
