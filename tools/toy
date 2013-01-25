@@ -1,0 +1,38 @@
+#android directory
+
+ANDROID_OR=/home/tt/work/or/or_android/
+ANDROID_OR_OUT=/home/tt/work/or/or_android/out/target/product/maguro
+ANDROID_GT=/home/tt/work/gt/gt_android/
+ANDROID_GT_OUT=/home/tt/work/gt/gt_android/out/target/product/msm8625
+
+function cor()
+{
+	if [ -d "$ANDROID_OR" ]
+	then
+		cd $ANDROID_OR
+	fi
+}
+
+function corout()
+{
+	    if [ -d "$ANDROID_OR_OUT" ]
+	    then
+	        cd $ANDROID_OR_OUT
+	    fi
+}
+
+function cgt()
+{
+	    if [ -d "$ANDROID_GT" ]
+	    then
+	        cd $ANDROID_GT
+	    fi
+}
+
+function cgtout()
+{
+    if [ -d "$ANDROID_GT_OUT" ]
+    then
+           cd $ANDROID_GT_OUT
+    fi
+}

@@ -1,0 +1,26 @@
+#!/usr/bin/expect -f
+
+#2013.1.18
+# copy zip file to 250 server
+
+#check the parameter
+if { $argc != 1 } {
+	send_user "Usage:$argv0 filename \n\n"
+	exit
+}
+
+#get the parameter
+set zipfile [lindex $argv 0]
+send_user "file $zipfile will be send \n\n"
+
+set user apa
+set host 10.11.14.250
+set passwd 0
+set dest_dir /work/htdocs/img
+
+spawn scp $zipfile $user@$host:$dest_dir
+expect "*assword:*"
+send "$passwd\r"
+expect eof
+exit
+

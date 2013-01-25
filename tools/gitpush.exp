@@ -1,0 +1,27 @@
+#!/usr/bin/expect -f
+
+#2013.1.25
+#git push for github
+
+#check the parameter
+#if { $argc != 1 } {
+#	send_user "Usage:$argv0 filename \n\n"
+#	exit
+#}
+
+#get the parameter
+#set zipfile [lindex $argv 0]
+#send_user "file $zipfile will be send \n\n"
+
+set user googlebet
+set passwd googlebet004005
+
+spawn git push origin master
+expect "*sernam*"
+send "$user\r"
+
+expect "asswor*"
+send "$passwd\r"
+
+interact
+
