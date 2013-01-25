@@ -1,0 +1,928 @@
+﻿1. Ubuntu 11.04 mount windows ntfs
+进入tty1，登陆root。输入:
+cd /
+mkdir winC
+mkdir winD
+mkdir winE
+mount /dev/sda1 /winC
+mount /dev/sda5 /winD
+mount /dev/sda6 /winE
+mount -t ntfs -o iocharset=cp936 /dev/sda3 /media/work 
+2. 更新源列表
+
+/etc/apt/sources.list
+
+sudo apt-get update
+
+# deb http://drmirror.archermind.com/ubuntu/ubuntu natty main restricted universe multiverse # 已禁止升级到
+ natty
+# deb http://drmirror.archermind.com/ubuntu/ubuntu maverick-security main restricted universe multiverse # 
+已禁止升级到 natty
+# deb http://drmirror.archermind.com/ubuntu/ubuntu maverick-updates main restricted universe multiverse # >
+已禁止升级到 natty
+# deb http://drmirror.archermind.com/ubuntu/ubuntu maverick-proposed main restricted universe multiverse # 
+已禁止升级到 natty
+# deb http://drmirror.archermind.com/ubuntu/ubuntu maverick-backports main restricted universe multiverse #
+ 已禁止升级到 natty
+# deb-src http://drmirror.archermind.com/ubuntu/ubuntu natty main restricted universe multiverse # 已禁止升
+级到 natty
+# deb-src http://drmirror.archermind.com/ubuntu/ubuntu maverick-security main restricted universe multivers
+e # 已禁止升级到 natty
+# deb-src http://drmirror.archermind.com/ubuntu/ubuntu maverick-updates main restricted universe multiverse
+ # 已禁止升级到 natty
+# deb-src http://drmirror.archermind.com/ubuntu/ubuntu maverick-proposed main restricted universe multivers
+e # 已禁止升级到 natty
+# deb-src http://drmirror.archermind.com/ubuntu/ubuntu maverick-backports main restricted universe multiver
+se # 已禁止升级到 natty
+
+# deb http://dl.google.com/linux/deb/ stable non-free # 已禁止升级到 natty
+
+deb http://mirrors.ustc.edu.cn/ubuntu/ natty main universe restricted multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ natty main universe restricted multiverse #Added by software-pro
+perties
+deb http://archive.canonical.com/ubuntu natty partner
+
+
+
+# deb http://archive.canonical.com/ lucid partner
+# deb-src http://archive.canonical.com/ lucid partner
+
+3. Ubuntu 查看版本命令
+cat /etc/issue 
+sudo lsb_release -a 
+
+4. ubuntu 查找文件命令
+find / -name httpd.conf 
+
+4. Ubuntu scp命令
+从 本地 复制到 远程 
+ scp /home/space/music/1.mp3 root@www.cumt.edu.cn:/home/root/others/music 
+ scp -r /home/space/music/ root@www.cumt.edu.cn:/home/root/others/ 
+ 
+ 从 远程 复制到 本地 
+ scp root@www.cumt.edu.cn:/home/root/others/music /home/space/music/1.mp3
+ scp -r www.cumt.edu.cn:/home/root/others/ /home/space/music/
+ 
+ 5. tee
+ $ ls | tee output.txt
+ 
+ 6.关于 ubuntu下的usb访问的事情
+   1）将usb设备加入到udev服务之中。
+   		sudo lsusb //查看设备设备信息
+   		
+      sudo vim /etc/udev/rules.d/51-android.rules
+      加入:
+      SUBSYSTEM=="usb", ATTR{idVendor}=="04e8", ATTR{idProduct}=="6860", MODE="0666"
+      sudo chmod a+rw /etc/udev/rules.d/51-android.rules
+      通过sudo lsusb获得设备的idVendor 及 idProduct
+      Bus 001 Device 002: ID 04e8:6860 Samsung Electronics Co., Ltd
+      需要注意的是必要使用“sudo"才能获得编号。
+      还需要加上一行：
+      SUBSYSTEM=="usb", SYSFS{idVendor}=="18d1", MODE="0666"
+      这样进入fastmode才能正常起作用，原因是the device shows up as "Google" so you also 
+      need to add an additional line to the above file so it looks like this:我估计"18d1"是代表
+      google的意思
+      
+   2）重新启动udev服务
+      sudo service udev restart
+   3) 查看是否可以看到设备(需要sudo)
+      sudo adb devices
+      正常情况下可以看到，否则会出现”List of devices attached “
+      这里需要
+      sudo adb kill-server
+      sudo adb devices
+      则可以正常，需要强调的是adb需要放到sudo直接能够找到的地方，如/usr/bin之中。
+      
+7. adb install uninstall
+	adb install <apk path>
+	adb uninstall com.bwf.calculator2 <package name>
+	
+8. adb 在ubuntu上的安装
+   adb工具只有32的版本，在64的机器上，需要安装ia32-libs作为桥梁才能使用起来。
+   另外adb可以从platforms目录中找到，如果没有，则需要更新sdk，以此获得sdk.
+   
+9. Cygwin ssh server安装
+  ssh-host-config
+	*** Info: The sshd service has been installed under the LocalSystem
+  *** Info: account (also known as SYSTEM). To start the service now, call
+  *** Info: `net start sshd' or `cygrunsrv -S sshd'.  Otherwise, it
+  *** Info: will start automatically after the next reboot.
+  可以直接使用windows的用户名登陆
+  
+  cygrunsrv.exe -S sshd  # 启动 SSH服务
+  net start sshd
+	
+10. android source tree build
+   清除中间文件，重新再编译
+   $ make clobber	
+   
+11. Galaxy Nexus 刷机过程
+   1) $adb reboot bootloader  //重新启动机器至fastboot模式,
+   2) $ fastboot oem unlock   //oem解锁,解一次就可以了，
+   3) $fastboot flashall -w   //当编译成功后刷入新编译的系统,
+   
+
+12. 下载android source code.
+   android source code 分为master 及分支版本，分支相对不稳定(据说,好象是假的)。
+   android-cts-4.1_r1 -> android-cts-4.1_r1
+   
+   下载代码的工具
+   $curl http://mirror.core.archermind.com/android/aosp/repo >repo
+   
+   $repo init -u https://android.googlesource.com/platform/manifest -b android-cts-4.1_r1  #初始化所要下载的分支
+   $repo sync # 开发下代码，从官网上下载，但是，网速太慢，可以从镜像上下载
+   
+   http://mirror.core.archermind.com/android/cyanogenmod/
+   repo init -u https://android.googlesource.com/platform/manifest
+   
+   从公司镜像上下载
+   $repo init -u git://mirror.core.archermind.com/android/aosp/platform/manifest.git -b android-cts-4.1_r1 #这样速度就快多了。
+   $repo sync
+  
+   2.  运行命令，从公司镜像服务器获取修改过的repo
+		curl http://mirror.core.archermind.com/android/aosp/repo >repo
+
+		3. 给予repo可执行的权限
+		chmod +x repo
+
+		4. 下载android 源码
+		./repo init -u git://mirror.core.archermind.com/android/aosp/platform/manifest.git -b $BRANCH
+		./repo sync
+ 
+
+
+   
+   CyanogenMod
+   repo init -u git://mirror.core.archermind.com/android/cyanogenmod/CyanogenMod/android.git
+
+13. adb pull push
+    $adb pull /mnt/sdcard/GalleryGoogle.apk  #这是下载单个文件，也可以下载整个目录
+    $adb start-server
+    $adb kill-server
+    $adb backup -f ~/ics-4.0.4-backup-$(date +%s).bkp -apk -shared -all  #adb 备份
+    $adb restore ~/ics-4.0.4-backup-1341953373.bkp  #恢复备份 
+        
+14. 刷新原ROM
+   $tar xfz yakju-imm76i-factory-8001e72f.tgz 
+   $./flash-all.sh     
+   
+15. Galaxy Nexus里缺少Camera,GPS及NFC的驱动解决方法
+   在编译AOSP版本的代码后，缺少上面3个驱动，可以通过下面的方法解决，从正常运行的ROM中
+   得到下面所缺少的文件，然后再放至out里对应的文件夹之中，删除system.img之后，再make重新生成
+   system.img文件，则可以加入缺少的驱动文件。仔细查看system.img，size确实也改变了，刷入手机
+   测试正常。
+	Code:
+	/system/app/CellBroadcastReceiver.apk
+	/system/bin/fRom
+	/system/vendor/etc/sirfgps.conf
+	/system/vendor/firmware/ducati-m3.bin
+	/system/vendor/firmware/libpn544_fw.so
+	/system/vendor/lib/hw/gps.omap4.so
+	
+	ducati-m3.bin \
+	gps.omap4.so \
+	libpn544_fw.so  \
+	sirfgps.conf
+
+	Then the hunt began for these files... it's up to you to find them.
+	
+	CellBroadcastReceiver.apk: I haven't had a chance to look into this 
+	one, so it's still missing. However, it is also missing from the other 
+	toro ROMs I've seen. My build seems to run fine without it.
+	fRom: is present under vendor/samsung/toro/proprietary/ but was being 
+	copied to the wrong location by the Android.mk file, so I corrected that.
+	sirfgps.conf: GPS. Get from toro 4.0.4 ROM.
+	ducati-m3.bin: Camera. Get from maguro 4.1 ROM.
+	libpn544_fw.so: NFC. Get from maguro 4.1 ROM.
+	gps.omap4.so: GPS. Get from toro 4.0.4 ROM.
+	
+	以上不符合android4.1.1添加驱动模块的规范，以下是正确的添加驱动的方法：
+	1） 将所要加入的驱动收集起来放入一个单独的目录之中,并建立正确的目录结构；
+	    vendor/other/magurgo/proprietary
+	    参考samsung编译BoardConfigPartial.mk  device-partial.mk
+	    将sirfgps.conf,ducati-m3.bin,libpn544_fw.so,gps.omap4.so放到proprietary目中，并
+	    在proprietary参考samsung编写Android.mk
+ 
+  2）在vender/samsung中修改编译文件，将others加入到系统编译环境之中。
+     修改BoardConfigPartial.mk,device-vendor.mk加入others
+ 
+  3）将others加入到系统的白名单之中。
+	   修改 build/core/tasks/vendor_module_check.mk
+	   如下所示:
+		
+		# Restrict the vendor module owners here.
+		_vendor_owner_whitelist := \
+        asus \
+        audience \
+        broadcom \
+        csr \
+        elan \
+        google \
+        imgtec \
+        invensense \
+        nvidia \
+        nxp \
+        samsung \
+        samsung_arm \
+        ti \
+        trusted_logic \
+        widevine \
+        others
+      
+      OK  
+        
+16. Ubuntu 10.10启动进入命令行模式非常之简单 
+	运行 sudo gedit /etc/default/grub
+  找到 GRUB_CMDLINE_LINUX_DEFAULT=”quiet splash”
+  改为 GRUB_CMDLINE_LINUX_DEFAULT=”quiet splash text”
+  运行 sudo update-grub
+
+17. apache 启动
+  $ sudo /etc/init.d/apache2 restart
+  
+18. ubuntu安装svn服务器过程
+  第一步：安装apache2  libapache2-svn subversion
+	sudo apt-get install apache2
+	sudo apt-get install subversion
+	sudo apt-get install libapache2-svn
+	安装完后按照提示
+	Run 'sudo /etc/init.d/apache2 restart' to activate new configuration!
+	
+	第二步：创建SVN库和项目
+	sudo mkdir /home/svn        //创建SVN库
+	sudo svnadmin create /home/svn/project      //创建项目
+	
+	第三步：创建组并添加成员
+	sudo addgroup subversion     //创建一个叫subversion的组为拥有仓库所在的目录
+	sudo  usermod -G subversion -a www-data   //将自己和“www-data”(Apache 用户)加入组成员中
+	查看：more /etc/group | grep subversion
+	系统提示：subversion:x:1001:www-data
+	
+	第四步：修改项目权限
+	sudo chown -R root:subversion /home/svn/project
+	sudo chmod -R g+rws /home/svn/project   //赋予组成员对所有新加入文件仓库的文件拥有相应的权限
+	查看txn-current-lock文件的权限和用户以及组信息
+	 ls -l /home/svn/myproject/db/txn-current-lock
+	系统提示：-rw-rwSr-- 1 root subversion 0 2011-01-25 17:47  /home/svn/project/db/txn-current-lock
+	
+	第五步：通过命令访问库
+	sudo svn co file://lodalhost/home/svn/project   //第一种方法，知道主机名时用
+	sudo svn co file:///home/svn/project    //第二种方法，当不确定主机命时用，这用的是file:///，三个斜杠
+	系统提示：取出版本 0。
+	己可以取出版本，说明SVN服务器己正常运行，下面试从webdav访问
+	第五步：配置apache2
+	修改 /etc/apache2/mods-available/dav_svn.conf
+	sudo vim /etc/apache2/mods-available/dav_svn.conf
+	加入以下代码：
+	＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+	<Location /svn/project>
+	DAV svn
+	SVNPath /home/svn/project
+	AuthType Basic
+	AuthName "project subversion repository"
+	AuthUserFile /etc/subversion/passwd
+	<LimitExcept GET PROPFIND OPTIONS REPORT>
+	Require valid-user
+	</LimitExcept>
+	</Location>
+	如果需要用户每次登录时都进行用户密码验证，就将<LimitExcept GET PROPFIND OPTIONS REPORT>与</LimitExcept>两行注释掉
+	加入代码后重启apache2
+	
+	第六步：建立/etc/subversion/passwd文件，这个文件里包含了用户授权的详细信息
+	添加用户
+	sudo htpasswd -c /etc/subversion/passwd [user_name]                //第一次添加用户使用参数“-c”以后再添加就不用了
+	访问文件仓库
+	 svn co http://hostname/svn/project project --username [username]
+
+	OK！这次通过web页面访问到版本库了，下面试一下导入版本库
+	导入版本库
+	把/var/www/下的内容导入版本号中：
+	sudo svn  import -m "第一次导入"  /var/www http://192.168.0.5/svn/project
+	＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+	系统提示：
+	认证领域: <http://192.168.0.5:80> myproject subversion repository
+	“root”的密码:
+	认证领域: <http://192.168.0.5:80> myproject subversion repository
+	用户名: test
+	“test”的密码:
+	增加           /var/www/index.html
+	-----------------------------------------------------------------------
+	注意!  你的密码，对于认证域:
+	   <http://192.168.0.5:80> myproject subversion repository
+	只能明文保存在磁盘上!  如果可能的话，请考虑配置你的系统，让 Subversion
+	可以保存加密后的密码。请参阅文档以获得详细信息。
+	你可以通过在“/home/icedot/.subversion/servers”中设置选项“store-plaintext-passwords”为“yes”或“no”，
+	来避免再次出现此警告。
+	-----------------------------------------------------------------------
+	保存未加密的密码(yes/no)?
+	请输入 'yes' 或 'no': yes
+	
+	提交后的版本为 1。
+
+19. 删除指目录之中的指定目录/文件
+   find -name ".svn" -exec rm -rf {} \;
+   find -name ".svn" |xargs rm -rvf /dev/null
+   
+   
+20. 删除系统应用
+    1、adb shell
+		2、su //切换到根用户		
+		3、mount -o rw,remount -t yaffs2 /dev/block/mtdblock3 /system		or mount -o rw,remount /dev/block/mtdblock3 /system		
+		4、chmod 777 /system 		
+		5、cd system		
+		6、chomd 777 app		
+		7、cd app		
+		8、chmod 777 XXX.apk  //XXX就是你要删除的系统里的应用名。		
+		9、 exit		
+		10、 rm XXX.apk     //这样你就可以删除你想要删除的apk了。
+		mount -o rw,remount -t yaffs2 /dev/block/mtdblock1 /data	   
+		
+		chmod 777 /system/media/
+		 
+21. windows远程桌面
+    mstsc -v 10.11.18.23
+   
+22. 合并代码
+   ssh://git@10.11.18.113/opt/git/repos/android.git
+   
+23. 在一个目录之中所有的文件中查找某个字符串
+   $find . -name "filename" |xargs grep -n somestring /dev/null
+
+24. 在android源代码库中新添加一个软件包
+   在下面的文件中添加包名   
+	 ./build/target/product/core.mk
+	 加上48
+	 VoiceBack
+	 ./target/product/mini.mk:170:    libXMengine
+	./target/product/generic_no_telephony.mk:56:    libXMengine
+
+25.修改默认的语言为中文
+   1)./build/tools/buildinfo.sh
+    PRODUCT_DEFAULT_LANGUAGE
+   
+   2)./build/target/product/core.mk  (重新标注系统的默认语言及国家)\      
+      PRODUCT_PROPERTY_OVERRIDES := \
+    	ro.config.notification_sound=OnTheHunt.ogg \
+    	ro.config.alarm_alert=Alarm_Classic.ogg \
+    	persist.sys.language=zh \
+    	persist.sys.country=CN
+    	
+26. ubun设置静态的ip地址
+   1) sudo vim /etc/network/interfaces
+      修改iface eth0 inet dhcp 为 iface eth0 inet static 
+			并在这句后添加
+			auto eth0
+			iface eth0 inet static
+			address 10.11.18.145
+			netmask 255.255.255.0
+			gateway 10.11.18.1
+			
+			保存退出后使用如下命令重启网络服务
+			/etc/init.d/networking restart    
+			
+	 2) 设置DNS 修改/etc/resolv.conf
+	    10.11.100.30
+	    10.11.100.10	
+	    
+27 打包命令
+  make systemimage - system.img
+	make userdataimage - userdata.img
+	make ramdisk - ramdisk.img
+	make snod - 快速打包system.img,不检测dependency
+	
+28 快速重建system.img
+	
+	以修改services模块为例，命令如下：
+	cd frameworks/base/services
+	mm
+	cd -
+	out/host/linux-x86/bin/mkyaffs2image -f out/target/product/generic/system out/target/product/generic/system.img 
+	out/host/linux-x86/bin/mkyaffs2image -f out/target/product/generic/date out/target/product/generic/userdata.img 
+	mkyaffs2image tmp/system/ system.img  压缩
+	uyaffs2 system.img  解压
+          
+	userdata.img
+	mkyaffs2image tmp/userdata userdata.img 压缩
+	uyaffs2 userdata.img 解压
+	fastboot flash userdata userdata.img
+
+29. 预置应用程序	
+  TARGET_OUT_DATA_APPS	out/data/app 目录，将文件copy到这个目录之中。
+	
+30. 查看端口
+  netstat -a  可以查看端口使用的情况
+  
+31. opencv 钞票识别
+
+32. .mk的一些常量
+
+	LOCAL_JAVA_LIBRARIES  :本地java库
+	LOCAL_STATIC_JAVA_LIBRARIES	 :本地静态java库
+	LOCAL_SHARED_LIBRARIES	:依赖的动态库，动态库可能是由代码编译而成；
+	LOCAL_LDFLAGS := $(LOCAL_PATH)/libIMAR.so   ：依赖的动态库，动态库无需编译，已经存在
+	LOCAL_MODULE_PATH :指明安装的路径
+  在Android.mk文件中，还可以指定最后的目标安装路径，用LOCAL_MODULE_PATH和LOCAL_UNSTRIPPED_PATH来指定。不同的文件系统路径用以下的宏进行选择：
+  TARGET_ROOT_OUT：表示根文件系统。
+  TARGET_OUT：表示system文件系统。
+  TARGET_OUT_DATA：表示data文件系统。
+  用法如：
+  CAL_MODULE_PATH:=$(TARGET_ROOT_OUT)
+ 	
+ 	调用字目录之中的 *.mk进行编译
+  include $(call all-makefiles-under,$(LOCAL_PATH))
+
+33. PRODUCT_COPY_FILES 作用
+   ANDROID_PRODUCT_OUT
+
+34. 使用shell命令示例
+   BUILD_NUMBER := eng.$(USER).$(shell date +%Y%m%d.%H%M%S)
+
+35. git log命令
+   git log --pretty=oneline |tee git.log
+   cat git.log |awk '{print $1}'
+
+36. nohup
+  可以在退出终端后，依然运行命令。
+  
+37. 公司镜像下载代码  
+  ./repo init -u git://mirror.core.archermind.com/android/aosp/platform/manifest.git -b android-4.1.2_r1
+  
+38. 防止编译工具优化掉一些函数的方法
+  1)在makefile之中添加LOCAL_PROGUARD_FLAG_FILES := proguard.flags
+  2)proguard.flags之中添加可能优化掉的代码如：
+    -keep class com.android.inputmethod.pinyin.PinyinDecoderService {
+    static *;
+    }
+  
+39. expect 自动登陆脚本
+  #!/usr/bin/expect -f
+  
+	set user tt
+	set port 122
+	set host 10.11.18.145
+	set password 1
+	set timeout -1
+	set end tt@tt
+	#spawn ssh -D $port $user@$host
+	spawn ssh $user@$host
+	expect "*assword:*"
+	
+	send "$password\r"
+	interact
+
+40. 把当前目录下的文件（文件日期要求是2011年9月14日01点至2011年9月15日01点之间的）拷贝到/home/luo目录下
+ls -l --time-style=full | awk '$6>"2011-09-13"&&$6<"2011-09-15"' | awk '$7>="01"&&$7<="24"{print $9}' | xargs -i -t cp {} /home/luo >/dev/null 2>&1
+
+41. 编译说明
+    pathmap.mk  framework-base 宏定义
+    version_defaults.mk 定义一些编译信息，如release/debug,build id,及build branche.
+    envsetup.mk 设置编译环境变量，host target
+    BoardConfig.mk  与设置的target相关，如maguro,只能存在一个target
+    BoardConfigVendor.mk   
+    tuna/BoardConfig.mk  重要，硬件平台主要的参数设置
+    $(BUILD_SYSTEM)/dumpvar.mk  显示设置过的信息内容
+    combo/select.mk  设置target,host
+    
+    在envsetup.sh的最后几行调用脚本添加产品信息
+    vendorsetup.sh 创建了产品的列表
+    ./device/moto/wingray/vendorsetup.sh
+		./device/samsung/maguro/vendorsetup.sh
+		./device/samsung/crespo/vendorsetup.sh
+		./device/generic/armv7-a-neon/vendorsetup.sh
+		./device/generic/armv7-a/vendorsetup.sh
+		./device/ti/panda/vendorsetup.sh
+		./device/asus/grouper/vendorsetup.sh
+
+    printconfig
+    choosetype
+    ============================================
+    PLATFORM_VERSION_CODENAME=REL
+		PLATFORM_VERSION=4.1.1
+		TARGET_PRODUCT=full_maguro
+		TARGET_BUILD_VARIANT=userdebug
+		TARGET_BUILD_TYPE=release
+		TARGET_BUILD_APPS=
+		TARGET_ARCH=arm
+		TARGET_ARCH_VARIANT=armv7-a-neon
+		HOST_ARCH=x86
+		HOST_OS=linux
+		HOST_OS_EXTRA=Linux-2.6.35-32-generic-x86_64-with-Ubuntu-10.10-maverick
+		HOST_BUILD_TYPE=release
+		BUILD_ID=MASTER
+		OUT_DIR=out
+		============================================
+   
+42. 开机动画
+   
+   修改./system/core/init/init.c文件
+   load_565rle_image 
+   ~/work/android/frameworks/base/core/res/assets/images
+   
+      
+  产品编译配置调用流程 (音乐)
+  1)./build/core/main.mk:79:include $(BUILD_SYSTEM)/config.mk
+  2)./build/core/config.mk:132:include $(BUILD_SYSTEM)/envsetup.mk
+ 	3)./build/core/envsetup.mk:115:include $(BUILD_SYSTEM)/product_config.mk
+ 	4)./build/core/product_config.mk:180:include $(BUILD_SYSTEM)/product.mk
+ 	5)./build/core/product.mk:27:  $(shell test -d vendor && find vendor -maxdepth 6 -name AndroidProducts.mk)
+ 	6)./device/samsung/tuna/AndroidProducts.mk:18:    $(LOCAL_DIR)/full_tuna.mk
+ 	7)./device/samsung/tuna/full_tuna.mk:25:$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base.mk)
+ 	8)./build/target/product/full_base.mk:55:$(call inherit-product-if-exists, frameworks/base/data/sounds/AllAudio.mk)
+ 	9)./frameworks/base/data/sounds/AllAudio.mk:19:$(call inherit-product, frameworks/base/data/sounds/AudioPackage3.mk)
+  10)./frameworks/base/data/sounds/AudioPackage3.mk:16:    $(LOCAL_PATH)/Alarm_Buzzer.ogg:system/media/audio/alarms/Alarm_Buzzer.ogg
+  
+  AnimationAll.mk
+  ./build/target/product/full_base.mk:55
+  # Get animation 新增
+	$(call inherit-product-if-exists, frameworks/base/data/animation/AnimationAll.mk)
+	AnimationAll.mk内容
+	 LOCAL_PATH:= frameworks/base/data/animation
+ 	 PRODUCT_COPY_FILES += \
+     $(LOCAL_PATH)/bootanimation.zip:system/media/bootanimation.zip
+  
+  制作bootanimation.zip
+   1）desc.txt:
+   	720 360 30   #分辨率，宽,高,播放频率
+		p 1 0 part0  #第一部分 播放1遍
+		p 0 0 part1  #第二部分 循环播放
+	 2）part0:文件夹
+	 3）part1:文件夹
+	 	文件的属性：-rw-r--r--+ 1 002064 Domain Users
+	 
+	 zip -0 bootanimation.zip part0/*png part1/*png desc.txt 
+
+  
+  Recorder.java  SoundRecorder.java  VUMeter.java
+  
+43. 显示系统
+   ./root/init.rc
+   ./system/core/init/init.c
+   
+44. 开机音乐
+   参考开机动画   
+   
+   2605a5a-shaodong.wang-SatNov24-133342-2012.zip
+    开机动画 init.rc
+    service bootanim /system/bin/bootanimation
+    class main
+    user graphics
+    group graphics
+    disabled
+    oneshot
+    
+    启动/关闭命令
+    setprop service.bootanim.exit 0
+    setprop ctl.start bootanim
+    setprop ctl.stop bootanim
+    
+45. 开发环境要求
+   1) 支持android4.1.1；
+   2) 支持进入fastboot操作模式；
+   3) 支持boot.img  ramdisk.img  ramdisk-recovery.img  recovery.img  system.img  userdata.img
+      在fastboot模式下烧录到机器之中；
+   4) 提供android4.1.1的开源原始代码，并能够在目标平台(手机)提供编译环境，可以编译出
+   boot.img  ramdisk.img  ramdisk-recovery.img  recovery.img  system.img  userdata.img 文件；
+   
+46. 查看进程
+   ps -ef
+   
+   CyanogenMod 10
+   
+   
+   packages/apps/Timer/src/com/archermind/android/timer/Timer.java:34: 软件包 android.support.v4.app 不存在
+	import android.support.v4.app.NavUtils;
+                             ^
+	注意：packages/apps/Timer/src/com/archermind/android/timer/TimerNotification.java 使用或覆盖了已过时的 API。
+	注意：要了解详细信息，请使用 -Xlint:deprecation 重新编译。
+	
+47. 北京捷通方面的技术要求
+ 
+    
+   1) 合成语音语速要求：
+      现状：捷通语音合成目前最快是6档；
+      要求：盲人群体对于合成语速的要求较高，要求能够达到科大讯语
+            音合成的最大语速；
+
+	 2) 两句话之间停顿
+	    现状：捷通语音合成两句之间停顿比较明显；
+	    要求：两句之间能够平滑过渡，没有明显的停顿现象；
+
+	 3) 是否支持其它语种
+  	  目前可以支持中文普通话 粤语和多个发音人
+
+	 4) 使用方式
+	    能够按照android的TTS框架机制， 提供详细的示例代码
+
+	 5) 验证方式
+	   提供离线验证的方式
+	   
+
+48. android4.1.1 release版本设置
+   TARGET_BUILD_VARIANT: eng user userdebug tests 
+   eng 工程师版本
+   user 发布用户版本
+   userdebug 用户高度版本
+   tests 测试版本
+   android/device/samsung/maguro/vendorsetup.sh
+   #add_lunch_combo full_maguro-userdebug
+	 add_lunch_combo full_maguro-user
+   
+49. 去除一些应用
+		输入法
+  ./target/product/generic_no_telephony.mk:33:    LatinIME \
+  ./target/product/full_base.mk:27:    OpenWnn \
+   PicoTts
+  ./target/product/core.mk:42:    PicoTts \
+  ./external/svox/pico/Android.mk:LOCAL_PACKAGE_NAME := PicoTts
+  高通上面去除PicoTts  
+	./build/target/product/core.mk:39:    PicoTts \	
+	./build/target/product/generic_no_telephony.mk:33:    LatinIME \
+  ./target/product/full_base.mk:27:      OpenWnn\
+
+ ./target/product/mini.mk:150:    LatinIME \
+./target/product/sdk.mk:46:     LatinIME \
+./target/product/large_emu_hw.mk:33:    LatinIME \
+./device/qcom/common/common.mk:425:    LatinIME \
+	
+	
+
+50. 修改默认语言
+   vim ./target/product/full_base.mk
+   63行
+   $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_small)
+   51 行
+   设置默认语言
+   
+   ./target/product/languages_small.mk
+   25行  
+   ./target/product/languages_small.mk
+   PRODUCT_LOCALES := zh_CN en_US
+ 
+51. 建新git空仓库
+   	我们在服务器上新建一个空的项目仓库供大家测试一下，我建了一个叫“teamwork”的仓库。
+		切换到git用户：
+		a@ubuntu:/home/git$ su - git
+		$ cd /home/prj_git
+		$ mkdir teamwork.git
+		$ cd teamwork.git
+		$ git init --bare
+		$ exit 
+52. git建立远程分支,合并
+    1)切换本地分支
+		git checkout 分支名，例如从master切换到分支：git checkout 2.0.1.20120806
+
+		2)远程分支就是本地分支push到服务器上。比如master就是一个最典型的远程分支（默认）。
+		git push origin 2.0.1.20120806		
+		$ git push origin test:master            // 提交本地test分支作为远程的master分支
+		$ git push origin test:test              // 提交本地test分支作为远程的test分支
+		
+		3)checkout远程git分支
+		 git checkout --track origin/2.0.1.20120806
+		 
+		4) 提交分支数据到远程服务器
+		  git push origin <local_branch_name>:<remote_branch_name>
+		
+		5)删除远程分支
+			git push origin :develop
+			如果想删除远程的分支呢？类似于上面，如果:左边的分支为空，那么将删除:右边的远程的分支。
+			$ git push origin :br1              // 刚提交到远程的test将被删除，但是本地还会保存的，不用担心 
+	  6)撒销一个合并
+		如果你觉得你合并后的状态是一团乱麻，想把当前的修改都放弃，你可以用下面的命令回到合并之前的状态：
+		$ git reset --hard HEAD
+		或者你已经把合并后的代码提交，但还是想把它们撒销：
+		$ git reset --hard ORIG_HEAD
+		但是刚才这条命令在某些情况会很危险，如果你把一个已经被另一个分支合并的分支给删了，那么 以后在合并相关的分支时会出错。
+		7)查看历史
+		  git log --oneline --decorate --graph
+		  git log --pretty=format:'%h : %s' --topo-order --graph
+		  
+53. 如何生成一个repo服务器
+		1)创建一个新的用户
+			
+   1)在服务器上那个一个test目录，建议一个空的manifest git仓库
+     
+      http://10.11.14.55/cgi-bin/gitweb.cgi
+      
+      repo init -u git://10.11.14.55/manifest.git
+      编译镜像文件
+      repo forall -c git push
+      
+      repo init -u git@10.11.14.55:manifest.git      
+      repo forall -c 'git remote set-url --push origin git@10.11.14.55:${REPO_PROJECT}.git'
+      repo forall -c git push
+      
+      测试
+      git@10.11.14.55:teamwork
+      ssh-keygen -t rsa
+      
+      git tag -s "v1.0" -m "init"
+      gpg --export --armor "yong.teng <yong.teng@archermind.com>"
+      
+   2) 安装daemon-run
+   	sudo apt-get install git-daemon-run
+   	
+   	重启git-daemon:
+		# sv restart git-daemon
+		ps aux|grep git
+		lrwxrwxrwx 1 git git 10 2012-12-05 17:26 repositories -> /home/repo
+
+54. repo 使用
+   1) 查repo版本
+     repo manifest -o - |grep default
+   2)切换到默认分支
+   	repo start master --all
+   3)按git方式正常修改
+   
+   4)提供内容至服务器
+   	 ：repo forall -c git push
+   	 多个:如果上游清单库如果是只读，需要为本地版本库一一更改上游版本库的本库地址
+   	 repo forall -c 'git remote set-url --push origin git@10.11.14.55:${REPO_PROJECT}.git'
+   	       
+ 
+
+  
+55. 高通编译
+   choosecombo release msm8625 userdebug
+   
+   origin  ssh://git@10.11.14.250/opt/git/repos/android.git (fetch)
+   origin  ssh://git@10.11.14.250/opt/git/repos/android.git (push)
+
+56. 操作示例
+   1) wget http://10.11.14.55/repo.zip 
+      unzip repo.zip 放到可运行的目录之中。
+            
+   2)初始化
+   repo init -u git@10.11.14.250:or/manifest -b master  (原生)
+   repo init -u git@10.11.14.250:gt/manifest -b master  (高通)
+   repo init -u git@10.11.14.250:gt/manifest -b merge_2_gt
+   
+   repo sync
+   
+   repo init -u git@10.11.14.250:gt/manifest -b master  (高通)
+   repo sync
+   source build/envsetup.sh
+   choosecombo release msm8625 userdebug
+   1 22 2
+   3)设置远程url
+   repo config repo.pushurl ssh://git@10.11.14.250/ 
+   repo config repo.pushurl 查看
+   4)建分支
+   repo start bugfi8888 --all 
+   5)提交
+    repo push
+   
+   不用每次本地都建分支
+   repo start master --all 
+   repo forall -c git push 
+   
+56. 取远程分支代码
+   git checkout --track origin/android
+   
+   提交分支数据到远程服务器
+   git push origin <local_branch_name>:<remote_branch_name>
+   
+   同步本地远程分支
+   $: git fetch origin
+   
+   彻底回退到某个版本
+   git reset –-hard
+   
+   撤销 某次操作
+   * git revert HEAD                  撤销前一次 commit
+   * git revert HEAD^               撤销前前一次 commit
+   * git revert commit （比如：fa042ce57ebbe5bb9c8db709f719cec2c58ee7ff）撤销指定的版本，撤销也会作为一次提交进行保存。
+     git revert是提交一个新的版本，将需要revert的版本的内容再反向修改回去，
+   
+57. 高通添加应用
+  VoiceBack \
+	SystemUpdate \
+	XingMuTTS \
+	CommonlyUsedDialpad \
+	Timer \
+	DigitalClock \
+	BillBoard \
+	libXMengine \
+	
+	./build/target/product/core.mk:31:    DefaultContainerService \
+	
+58. 自动版本编译系统
+  1)检测版本提交信息
+  	forall -c 'pwd; echo; git log --after=2012-12-22 --name-status >log'
+
+59. 好点模式
+  xm/RSRecognition xm/GoodPoint	
+  
+  git clone git@10.11.14.250:xm/RSRecognition
+  git clone git@10.11.14.250:xm/GoodPoint
+
+platform/msm_shared/include/splash.h
+
+60. 关于crontab的问题
+   crontab -e //编辑任务
+   crontab -l //显示任务
+   crontab -r //删除任务
+   
+   #!/bin/bash -l //脚本需要以/bin/bash开始 加上 -l开关，表示log bash用户读入，可以读取系统的环境变量
+   07 14 * * * /home/tt/bin/atc.sh > /home/tt/bin/build.log  2>&1  //可以重定向错误2文件句柄到标准输出文件句柄1，用这个方法调试脚本。
+   
+61. vimrc 设置
+    
+  set stal=2
+	set nocompatible
+	set nu
+	set history=1000
+	set background=dark
+	set autoindent
+	set smartindent
+	set tabstop=4
+	set shiftwidth=4
+	set showmatch
+	set guioptions-=T
+	set vb t_vb=
+	set ruler
+	set nohls
+	
+	set incsearch
+	
+	set fileencodings=ucs-bom,utf-8,cp936
+	
+	set fileencoding=utf-8
+	set encoding=cp936
+	set cul   
+
+62. 实现make clean的功能
+   在相关的应用之中加上
+   $(call add-clean-step, rm -rf $(OUT_DIR)/target/common/obj/APPS/AndroidTests_intermediates)
+   运行一次加一次
+   
+63. 合作需求
+  1.提供system.img相关的源码.
+    a.我们修改了大量framework源码，做成独立的apk,或者so文件，是不现实的。
+    b.我们后续的开发工作依然要基于framework源码，没有源码，工作没法继续进行。
+    
+  2.framework中驱动相关文件
+    a.提供照像机驱动文件，目前照像机应用不能正常工作。
+    
+  3.提供一键下载工具：用于更新arm9硬件参数相关软件。
+  4.提供boot.img/system.img(优思原有,用于作比较)，手机windows xp 平台驱动
+  
+64. 报销 285 + 150    	
+
+65. 
+   ./vendor/qcom/opensource/qrdplus/QRDExtensions/DynamicComponents/res/Launcher_Shortcuts/Android.mk:12:        $(shell cp
+ $(LOCAL_PATH)/$(QRDExt_Launcher_Shortcut_gp)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
+./vendor/qcom/opensource/qrdplus/QRDExtensions/DynamicComponents/res/Launcher_Shortcuts/Android.mk:14:    $(shell cp $(L
+OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
+   修改第三行
+  ./vendor/qcom/opensource/qrdplus/QRDExtensions/DynamicComponents/res/Launcher_Shortcuts/Android.mk 
+  QRDExt_Launcher_Shortcut_gp:=no 原生
+  QRDExt_Launcher_Shortcut_gp:=yes 修改后
+  
+  user
+     2. userdebug
+     3. eng
+     
+./frameworks/base/core/jni/qrdinside
+./frameworks/base/core/java/org/qrdinside
+
+66. centos修改防火墙
+	1)查看状态
+  /etc/init.d/iptables status  
+  2)停止
+  /etc/init.d/iptables stop
+  3)启动
+  /etc/init.d/iptables start
+  4)重启
+  /etc/init.d/iptables restart
+  5)修改配置文件，增加80端口
+  vim /etc/sysconfig/iptables
+  增加一行,保存退出重启iptables就可以了。
+  -A RH-Firewall-1-INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+
+67. expect脚本运行有crontab环境中出现问题
+   由于在crontab之中首先你看看你的expect的那个地方
+   是不是就是“pssword：”如果能匹配其他的不妨在后面或者前面加上个“*”试试，
+   另外你的那个interact那个地方，应该也有问题，改成-->expect eof 回车 exit，
+   如下所示：
+   interact   
+   expect eof
+	 exit
+
+68. key trust
+  不明白为什么要用打password来scp，建一个key trust不就行了
+	ssh-keygen -t rsa
+	cat id_rsa.pub >> .ssh/authorized_keys  
+  chmod 600 .ssh/authorized_keys   
+  
+  戴琛  14:04:52
+	SeeMore_UC1_1.0.0
+	戴琛  14:12:47
+	SeeMore_SS1_1.0.0
+	
+	优思 显示在
+	     型  号 UC1  
+	     版本号 SeeMore_UC1_V1.1.0
+70.
+tt@tt:~/project/github$ git push origin master
+Username:
+Password:
