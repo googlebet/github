@@ -960,3 +960,8 @@ OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
 	
 	共享标签
 	$ git push –tags
+	
+	三星I8262D
+
+72.刷机目录	
+	C:\WINDOWS\Uniscope QCOM EMCP Upgrade\Finish
