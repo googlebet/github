@@ -1,0 +1,46 @@
+1. 代码下载
+   git hub工作有点不正常，经过多次下载才成功；
+   
+2. 获得已经编译好的应用
+   $ cd ~/android/system/vendor/cm
+   $ ./get-prebuilts
+   
+3. Prepare the device-specific code 
+   $ . build/envsetup.sh
+   $ breakfast maguro
+   再次，从github下载代码
+   From git://github.com/CyanogenMod/android_kernel_samsung_tuna
+   linux内核代码
+   From git://github.com/CyanogenMod/android_device_samsung_tuna
+   设备相关代码
+   
+   相关参数
+    ============================================
+		PLATFORM_VERSION_CODENAME=REL
+		PLATFORM_VERSION=4.2.1
+		TARGET_PRODUCT=cm_maguro
+		TARGET_BUILD_VARIANT=userdebug
+		TARGET_BUILD_TYPE=release
+		TARGET_BUILD_APPS=
+		TARGET_ARCH=arm
+		TARGET_ARCH_VARIANT=armv7-a-neon
+		HOST_ARCH=x86
+		HOST_OS=linux
+		HOST_OS_EXTRA=Linux-2.6.35-32-generic-x86_64-with-Ubuntu-10.10-maverick
+		HOST_BUILD_TYPE=release
+		BUILD_ID=JOP40D
+		OUT_DIR=/home/tt/android/system/out
+		============================================
+
+4. Extract proprietary blobs
+   $cd ~/android/system/device/samsung/maguro
+   
+   $ ./extract-files.sh
+   从手机之中获得硬件相关的一些资源文件.
+   
+5. Turn on caching to speed up build 
+    export USE_CCACHE=1
+    
+6. Start the build 
+	$ croot
+	$ brunch maguro
