@@ -966,3 +966,5 @@ OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
 72.刷机目录	
 	C:\WINDOWS\Uniscope QCOM EMCP Upgrade\Finish
 	
+73.查看移动硬盘
+  $sudo fdisk -l //查看移动硬盘挂载情况

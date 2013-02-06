@@ -44,3 +44,10 @@
 6. Start the build 
 	$ croot
 	$ brunch maguro
+	
+7. msm8625
+   ro.product.manufacturer=unknown
+   ro.product.manufacturer=amt  //vendor name
+   ro.product.device=msm8625  //codename
+   ro.product.board=7x27
+   ro.board.platform=msm7627a
