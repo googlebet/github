@@ -51,3 +51,11 @@
    ro.product.device=msm8625  //codename
    ro.product.board=7x27
    ro.board.platform=msm7627a
+   
+8. 
+  ./build/tools/device/mkvendor.sh sam 91 ~/tmp/cm/boot.img   
+  Done!
+  Use the following command to set up your build environment:
+   lunch full_91-eng
+  And use the follwowing command to build a recovery:
+   . build/tools/device/makerecoveries.sh full_91-eng

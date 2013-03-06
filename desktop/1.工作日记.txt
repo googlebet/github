@@ -968,3 +968,24 @@ OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
 	
 73.查看移动硬盘
   $sudo fdisk -l //查看移动硬盘挂载情况
+  
+74.contab 设置星期 
+   在最后一个域中
+   
+75.hosts name设置   
+  windows
+  C:\WINDOWS\system32\drivers\etc
+  修改Hosts 文件，如 
+  127.0.0.1       localhost
+	10.20.42.4      mycm
+	10.20.42.218    codes
+	10.20.100.11    comcm
+	运行
+	ipconfig /flushdns
+	
+	ubuntu flush dns
+	sudo vim /etc/hosts
+	10.20.42.218    codes
+	10.20.100.11    comcm
+	运行
+	sudo /etc/init.d/networking restart
