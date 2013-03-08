@@ -12,7 +12,6 @@
 #get the parameter
 #set zipfile [lindex $argv 0]
 #send_user "file $zipfile will be send \n\n"
-#origin  https://github.com/googlebet/github.git (fetch)
 
 set user googlebet
 set passwd googlebet004005
