@@ -989,3 +989,18 @@ OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
 	10.20.100.11    comcm
 	运行
 	sudo /etc/init.d/networking restart
+	
+76. 查看文件夹大小
+  $du --max-depth=1 -h	
+  
+77. 服务器名称修改
+  为了便与迁移,代码服务器定名称"codes" code server，请各位抽修改一下：
+  sudo vim /etc/hosts  
+  添加10.20.42.218    codes
+  sudo /etc/init.d/networking restart
+  
+  有时间重新更新一下代码。
+  repo init -u git@codes:or/manifest -b dev
+  repo init -u git@codes:gt/manifest -b dev
+  
+ 
