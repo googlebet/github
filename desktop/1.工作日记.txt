@@ -1,5 +1,5 @@
 ﻿1. Ubuntu 11.04 mount windows ntfs
-进入tty1，登陆root。输入:
+进入tty1，登陆root。输入:s
 cd /
 mkdir winC
 mkdir winD
@@ -9,7 +9,7 @@ mount /dev/sda5 /winD
 mount /dev/sda6 /winE
 mount -t ntfs -o iocharset=cp936 /dev/sda3 /media/work 
 2. 更新源列表
-
+ 
 /etc/apt/sources.list
 
 sudo apt-get update
@@ -1003,4 +1003,9 @@ OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
   repo init -u git@codes:or/manifest -b dev
   repo init -u git@codes:gt/manifest -b dev
   
- 
+78. 添加系统用户
+  net user name pass /add
+  net localgroup administrators name /add
+  
+
+
