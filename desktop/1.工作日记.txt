@@ -1009,3 +1009,5 @@ OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
   
 
 
+55repo init -u git@tt:google/platform/manifest.git -b android-4.1.1_r6
+MODULE.TARGET.JAVA_LIBRARIES.libname
