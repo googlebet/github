@@ -1008,6 +1008,49 @@ OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
   net localgroup administrators name /add
   
 
+79. 自己的镜像
+	55repo init -u git@tt:google/platform/manifest.git -b android-4.2.2_r1	
 
-55repo init -u git@tt:google/platform/manifest.git -b android-4.1.1_r6
-MODULE.TARGET.JAVA_LIBRARIES.libname
+	repositories/google/platform/prebuilts/eclipse-build-deps-sources.git
+	repositories/google/platform/prebuilts/eclipse-build-deps.git
+	
+	origin/android-4.1.1_r6
+	repo init -u git://mirror.core.archermind.com/android/aosp/platform/manifest.git -b android-4.1.1_r6
+	55repo init -u git@tt:google/platform/manifest.git -b android-4.1.1_r6
+
+   [new branch]      android-4.1.1_r1 -> origin/android-4.1.1_r1
+	 [new branch]      android-4.1.1_r1.1 -> origin/android-4.1.1_r1.1
+	 [new branch]      android-4.1.1_r2 -> origin/android-4.1.1_r2
+	 [new branch]      android-4.1.1_r3 -> origin/android-4.1.1_r3
+	 [new branch]      android-4.1.1_r4 -> origin/android-4.1.1_r4
+	 [new branch]      android-4.1.1_r5 -> origin/android-4.1.1_r5
+	 [new branch]      android-4.1.1_r6 -> origin/android-4.1.1_r6
+	 [new branch]      android-4.1.1_r6.1 -> origin/android-4.1.1_r6.1
+	 
+	 xm-android-4.1.1.6r
+	 
+80. 高能launcher的xml
+ ~/work/gt/gt_android/vendor/qcom/opensource/qrdplus/QRDExtensions/DynamicComponents/res/Launcher_Shortcuts
+
+ 	./vendor/qcom/opensource/qrdplus/QRDExtensions/DynamicComponents/res/Launcher_Shortcuts/default_workspace.xml
+ 	应该是这个被copy到原生的xml，
+ 	./vendor/qcom/opensource/qrdplus/QRDExtensions/DynamicComponents/res/Launcher_Shortcuts/Android.mk
+ 	应该修改这个文件,在这个文件之中覆盖了默认的xml文件,来仔细看看：
+  改掉android.mk的名称，不再执行这个命令了。
+  
+	./vendor/qcom/opensource/qrdplus/QRDExtensions/DynamicComponents/res/Launcher_Shortcuts/ct/default_workspace.xml
+	这个没有用到
+	./packages/apps/Launcher2/res/xml/default_workspace.xml
+	真到有用的是这个
+	./packages/apps/Launcher2/res/xml-sw720dp/default_workspace.xml
+	./packages/apps/Launcher2/res/xml-sw600dp/default_workspace.xml
+	这两个都没有用到
+	
+81. 高能添加新的应用
+ 	./qcom/proprietary/others/Android.mk:78:LOCAL_MODULE := weibo
+	./qcom/proprietary/others/Android.mk:80:LOCAL_SRC_FILES := weibo.apk
+	./qcom/proprietary/common/config/device-vendor.mk:977:PRODUCT_PACKAGES += weibo
+	
+82. 独立的第三方apk仓库
+  	
+ 	 
