@@ -1053,4 +1053,53 @@ OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
 	
 82. 独立的第三方apk仓库
   	
- 	 
+83.draw
+ 	  ViewRootImpl.java
+ 	  先说一下Surface的工作流程（只在Native层）：
+		
+		2052 private void draw(boolean fullRedrawNeeded)
+	  2153 } else if (!drawSoftware(surface, attachInfo, yoff, scalingRequired, dirty)) 
+	  			开始画图		     
+		2269 surface.unlockCanvasAndPost(canvas)
+		      画完了
+		
+    Java层Surface的创建将导致JNI的Surface_init函数的调用。这个Surface还不是APP使用的Surface，
+    中间会经历过乾坤大挪移的过程，请参考上面所提的书籍，写得非常详细。
+    Surface_writeToParcel，将Surface传递到APP所在进程去使用。
+    APP所在进程通过Surface_readFromParcel，还原一个Surface对象。此时，你的APP就有脸了。
+    APP调用Surface_lockCanvas获得一块画布，APP然后在这块画布上作画。
+    APP调用Surface_unlockCanvasAndPost，将数据推向SurfaceFlinger，完成此次作画。
+    
+    view.java 
+    97:
+    import android.graphics.ColorMatrix;
+		import android.graphics.ColorMatrixColorFilter;
+
+    13527:
+		ColorMatrix cm = new ColorMatrix();
+		cm.setSaturation(0);
+		ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+		background.setColorFilter(f);
+
+84. 签名
+   java -jar signapk.jar platform.x509.pem platform.pk8 AppStore_xm.apk AppStore_xm_signed.apk      
+
+   java -jar tools/signapk.jar key/platform.x509.pem key/platform.pk8 apk/AppStore_xm.apk apk/AppStore_xm_signed.apk
+   
+85. 建立tag,branch
+   tag  xm1.1.0_r1_
+   branch xm1.1.0_r1  
+   
+86. 新浪尾巴
+  手机root后用re管理器打开system/build.prop.
+	长按build.prop文件，弹出选择项，请选择“打开为”。
+	选择“文本编辑器”。
+	    ro.product.model
+	找到ro.product.manufacturer=*******,将*******更改为你想自定义的文字，如“addroid,yoyo等等。   
+	
+87、文件比较
+ diff -yrq --exclude=".git*" android /home/tt/work/gt/gt_android |tee ~/log
+ 江苏诚迈科技有限公司	
+ 
+88、列出目录中所有文件
+ find .  -xtype f
