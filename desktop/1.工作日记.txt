@@ -908,7 +908,7 @@ OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
    expect eof
 	 exit
 
-68. key trust
+68. key trust 信任
   不明白为什么要用打password来scp，建一个key trust不就行了
 	ssh-keygen -t rsa
 	cat id_rsa.pub >> .ssh/authorized_keys  
@@ -1103,3 +1103,21 @@ OCAL_PATH)/default_workspace.xml  $(LAUNCHER_XML_PATH)/default_workspace.xml)
  
 88、列出目录中所有文件
  find .  -xtype f
+ 
+89、1.2.0版本
+  repo init -u git@codes:gt/manifest -b xm1.2.0
+  repo init -u git@codes:or/manifest -b xm1.2.0
+  
+90、MT6589  
+  ./mk hexing77_ics2 new
+  ./mk listp
+  
+91、备分system.img
+	首先 adb shell
+	cat /proc/mounts（有些看mountinfo） 看一下system 挂载在哪里
+	输入 dd if=/dev/block/mmcblk0p22 of=/sdcard/system.img
+	data.img拷贝也是同样的，这样就可以做到备份系统了
+  
+  打开ROM包内容：
+	mount -o loop system.img system
+	到这步就可以尽情修改了
