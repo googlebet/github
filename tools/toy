@@ -4,6 +4,10 @@ ANDROID_OR=/home/tt/work/or/or_android/
 ANDROID_OR_OUT=/home/tt/work/or/or_android/out/target/product/maguro
 ANDROID_GT=/home/tt/work/gt/gt_android/
 ANDROID_GT_OUT=/home/tt/work/gt/gt_android/out/target/product/msm8625
+ANDROID_CM=/home/tt/work/cm/cm_android
+ANDROID_CM_OUT=/home/tt/work/cm/cm_android/out/target/product/maguro
+ANDROID_CMI=/home/tt/work/mi2/mi2_android
+ANDROID_CMI_OUT=/home/tt/work/mi2/mi2_android/out/target/product/aries
 
 function cor()
 {
@@ -35,4 +39,62 @@ function cgtout()
     then
            cd $ANDROID_GT_OUT
     fi
+}
+
+function cm()
+{
+        if [ -d "$ANDROID_CM" ]
+        then
+            cd $ANDROID_CM
+        fi
+}
+
+function ccmout()
+{
+        if [ -d "$ANDROID_CM_OUT" ]
+        then
+            cd $ANDROID_CM_OUT
+        fi
+}
+
+function cmi()
+{
+        if [ -d "$ANDROID_CMI" ]
+        then
+            cd $ANDROID_CMI
+        fi
+}
+
+function ccmiout()
+{
+        if [ -d "$ANDROID_CMI_OUT" ]
+        then
+            cd $ANDROID_CMI_OUT
+        fi
+}
+
+function myth()
+{
+	if [ $# -lt 1 ]
+	then
+		echo "wrong parameters"
+	fi
+
+	find . -name $1 |xargs touch /dev/null
+
+}
+
+function mygp()
+{
+	if [ $# -lt 2 ]
+	then 
+		echo "need tow parameters"
+		echo "for example: myph para1 para2"
+		return 1
+	fi
+
+	echo "find $1 grep $2"
+
+	find . -name $1 |xargs grep --color=auto -n $2 /dev/null
+
 }

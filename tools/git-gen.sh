@@ -29,32 +29,6 @@ function is_empty_dir()
 
 }
 
-
-#A="ss.git"
-#B=".git"
-#C=`echo ${A%.git}`
-#echo $C
-
-REP="replog"
-if [ -e $REP ]
-then
-	rm -f $REP
-fi
-
-LOG="log"
-find . -name ".git" >$LOG
-find . -name ".gitignore" |xargs rm -vf
-
-RESULT="default.xml"
-if [ -e $RESULT ]
-then
-	rm -f $RESULT
-fi
-
-DESTNAME="/home/tt/CyanogenMod/"
-
-ROOTDIR=`pwd`
-
 function delete_dir()
 {
 	if [ -d $DESTNAME ]
@@ -64,6 +38,38 @@ function delete_dir()
 
 	return 0
 }
+
+function delete_file()
+{
+	echo "delete $1 file"
+
+	if [ -e $1 ]
+	then
+    	rm -f $REP
+	fi
+
+	return 0
+}
+
+#main progrem
+
+REPNAME="xiaomi2/"
+PATHRENAME="mi2_android/"
+REP="replog"
+delete_file $REP
+
+
+LOG="log"
+find . -name ".git" >$LOG
+find . -name ".gitignore" |xargs rm -vf
+
+RESULT="default.xml"
+delete_file $RESULT
+
+
+DESTNAME="/home/tt/$REPNAME"
+ROOTDIR=`pwd`
+
 
 #delte dir
 delete_dir
@@ -88,7 +94,7 @@ then
 		GITNAME=`echo ${GITDIR##*/}`
 		echo "git name $GITNAME"
 		echo -e "\t$GITDIR" >>$REP
-		echo -e "\t<project path=\"$GITDIR\"  name=\"CyanogenMod/$GITDIR\" />" >> $RESULT
+		echo -e "\t<project path=\"$PATHRENAME$GITDIR\"  name=\"$REPNAME$GITDIR\" />" >> $RESULT
 		
 		#go to git dir
 		if [ -d "$GITDIR" ]
